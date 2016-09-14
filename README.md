@@ -9,9 +9,7 @@ Install in roles and call from playbook with:
 ```
 - hosts: logstash_servers
   roles:
-   - {
-     role: logstash
-    }
+   - logstash
 ```
 
 ## Notes
