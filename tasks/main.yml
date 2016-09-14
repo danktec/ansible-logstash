@@ -20,6 +20,9 @@
   copy: src=99-output.conf dest=/etc/logstash/conf.d/99-output.conf
   notify: restart logstash
 
+- name: Set Logstash to autostart
+  shell: chkconfig --add logstash
+
 #- name: Allow incoming connections
 #  iptables: chain=INPUT
 #            action=insert
