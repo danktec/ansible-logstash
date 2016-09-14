@@ -2,6 +2,12 @@
 - name: Copy the EPEL repository definition
   copy: src=logstash.repo dest=/etc/yum.repos.d/logstash.repo
 
+- name: Install Java
+  yum: name=java state=latest
+
+- name: Install logstash
+  yum: name=logstash state=present
+
 - name: Install inputs
   copy: src=00-input.conf dest=/etc/logstash/conf.d/00-input.conf
   notify: restart logstash
@@ -14,13 +20,7 @@
   copy: src=99-output.conf dest=/etc/logstash/conf.d/99-output.conf
   notify: restart logstash
 
-- name: Install Java
-  yum: name=java state=latest
-
-- name: Install logstash
-  yum: name=logstash state=present
-
-- name: Allow incoming connections
+#- name: Allow incoming connections
 #  iptables: chain=INPUT
 #            action=insert
 #            source=0.0.0.0/0
