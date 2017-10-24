@@ -1,15 +1,11 @@
 output {
 
-    file {
+  file {
+    path => "/tmp/stash.log"
+  }
 
-      path => "/tmp/stash.log"
-
-    }
-
-    elasticsearch {
-
-      hosts => "{{ elasticsearch_address }}"
-
-    }
+  elasticsearch {
+    hosts => "{{ elasticsearch_address }}"
+  }
 
 }
