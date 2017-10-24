@@ -1,6 +1,6 @@
 input {
     rabbitmq {
-        host => "localhost"
+        host => "{{ ansible_default_ipv4.address }}"
         user => "sensu"
         password => "sensu"
         vhost => "/sensu"

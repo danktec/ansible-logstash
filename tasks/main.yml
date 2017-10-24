@@ -1,37 +1,68 @@
 ---
-- name: Copy the EPEL repository definition
-  copy: src=logstash.repo dest=/etc/yum.repos.d/logstash.repo
+
+## Install Java
+- name: Add the Java key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    state: present
+    id: EEA14886
+  become: true
+
+- name: Add the APT repo
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+    filename: 'java-8-debian.list'
+  become: true
+  with_items:
+    - "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main"
+    - "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main"
+
+  # Automatically accept the license agreement
+- shell: "echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections"
+  become: true
+- shell: "echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections"
+  become: true
 
 - name: Install Java
-  yum: name=java state=latest
+  apt:
+    name: oracle-java8-installer
+    state: present
+    update_cache: yes
+  become: true
+
+## Install Logstash
+- name: Add the Logstash key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+  become: true
+
+- name: Add the logstash APT repo
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/5.x/apt stable main
+    state: present
+    filename: 'elastic-5.x.list'
+  become: true
 
 - name: Install logstash
-  yum: name=logstash state=present
+  apt:
+    name: logstash
+    state: present
+    update_cache: yes
+  become: true
 
 - name: Install inputs
-  copy: src=00-input.conf dest=/etc/logstash/conf.d/00-input.conf
+  template: src=00-input.conf.j2 dest=/etc/logstash/conf.d/00-input.conf
   notify: restart logstash
+  become: true
 
 - name: Install filters
-  copy: src=10-filter.conf dest=/etc/logstash/conf.d/10-filter.conf
+  template: src=10-filter.conf.j2 dest=/etc/logstash/conf.d/10-filter.conf
   notify: restart logstash
+  become: true
 
 - name: Install outputs
-  copy: src=99-output.conf dest=/etc/logstash/conf.d/99-output.conf
+  template: src=99-output.conf.j2 dest=/etc/logstash/conf.d/99-output.conf
   notify: restart logstash
-
-- name: Set Logstash to autostart
-  shell: chkconfig --add logstash
-
-#- name: Allow incoming connections
-#  iptables: chain=INPUT
-#            action=insert
-#            source=0.0.0.0/0
-#            protocol=tcp 
-#            match=tcp 
-#            state=present 
-#            ctstate=NEW 
-#            destination_port=3000
-#            jump=ACCEPT 
- 
-
+  become: true
