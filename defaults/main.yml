@@ -1,1 +1,3 @@
 elasticsearch_address: localhost
+elasticsearch_user: ""
+elasticsearch_pass: ""

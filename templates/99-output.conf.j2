@@ -6,6 +6,8 @@ output {
 
   elasticsearch {
     hosts => "{{ elasticsearch_address }}"
+    user => "{{ elasticsearch_user }}"
+    password => "{{ elasticsearch_pass }}"
   }
 
 }
