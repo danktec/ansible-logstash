@@ -85,7 +85,7 @@
 
 - name: Install the Logstash cert into the correct location
   copy: 
-    content: "{{ logstash_ssh_key }}"
-    dest: "{{ logstash_cert_file }}"
+    content: "{{ logstash_cert_file }}"
+    dest: "{{ logstash_cert_path }}"
     mode: 0644
   become: true
