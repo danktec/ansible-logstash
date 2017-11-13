@@ -80,7 +80,7 @@
   file: 
     path: /etc/logstash/ssl
     state: directory
-    mode: 0644
+    mode: 0755
   become: true
 
 - name: Install the Logstash cert into the correct location
