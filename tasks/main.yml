@@ -88,4 +88,5 @@
     content: "{{ logstash_cert_file }}"
     dest: "{{ logstash_cert_path }}"
     mode: 0644
+  notify: restart logstash
   become: true
