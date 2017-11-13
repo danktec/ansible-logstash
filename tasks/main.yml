@@ -66,3 +66,26 @@
   template: src=99-output.conf.j2 dest=/etc/logstash/conf.d/99-output.conf
   notify: restart logstash
   become: true
+
+- name: Install Logstash plugins
+  logstash_plugin:
+    state: present
+    name: "{{ items }}"
+  with_items:
+    - logstash-output-lumberjack
+    - logstash-input-rabbitmq
+  become: true
+
+- name: Ensure SSL dir exits
+  file: 
+    path: /etc/logstash/ssl
+    state: directory
+    mode: 0644
+  become: true
+
+- name: Install the Logstash cert into the correct location
+  copy: 
+    content: "{{ logstash_ssh_key }}"
+    dest: "{{ logstash_cert_file }}"
+    mode: 0644
+  become: true
