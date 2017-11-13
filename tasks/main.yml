@@ -70,7 +70,7 @@
 - name: Install Logstash plugins
   logstash_plugin:
     state: present
-    name: "{{ items }}"
+    name: "{{ item }}"
   with_items:
     - logstash-output-lumberjack
     - logstash-input-rabbitmq
