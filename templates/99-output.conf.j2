@@ -10,4 +10,11 @@ output {
     password => "{{ elasticsearch_pass }}"
   }
 
+  lumberjack {
+    hosts => "{{ lumberjack_address }}"
+    port => 3333
+    ssl_certificate => "/etc/logstash/ssl/logstash-forwarder.crt"
+    codec => "json"
+  }
+
 }
